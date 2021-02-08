@@ -1,6 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const app = express();
+
+//requiring local modules is different than requiring npm modules
+
+const date = require(__dirname + '/date.js'); // to make app.js clean from unrelated code 
+// console.log(date.Module_Name); using more exports
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
@@ -16,15 +22,8 @@ app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
 
-    let today = new Date();
-
-    let options = {
-        year : 'numeric',
-        month : 'short',
-        weekday  : 'long',
-        day : 'numeric'
-    }
-   let day = today.toLocaleDateString('en-US',options);
+    
+    let day = date.formatDate();
     res.render('list', {
         listTitle : day,
         newListItems:newToDoItems
@@ -35,7 +34,9 @@ app.get('/', function (req, res) {
 app.post('/',function(req,res){
     
     let newToDoItem = req.body.newToDo;
-    console.log(req.body);
+
+    // console.log(req.body);
+    
     if(req.body.listName === 'Worklist'){
         
         newWorkToDoItems.push(newToDoItem);
